@@ -19,31 +19,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import kodlamaio.hrms.business.abstracts.CandidateService;
+import kodlamaio.hrms.business.abstracts.EmployerService;
 import kodlamaio.hrms.core.utilities.results.DataResult;
 import kodlamaio.hrms.core.utilities.results.ErrorDataResult;
-import kodlamaio.hrms.entities.concretes.Candidate;
+import kodlamaio.hrms.entities.concretes.Employer;
 
 @RestController
-@RequestMapping("/api/candidates")
-public class CandidatesController {
+@RequestMapping("/api/employers")
+public class EmployersController {
 
-	private CandidateService candidateService;
-	
+	private EmployerService employerService;
+
 	@Autowired
-	public CandidatesController(CandidateService candidateService) {
+	public EmployersController(EmployerService employerService) {
 		super();
-		this.candidateService = candidateService;
+		this.employerService = employerService;
 	}
-	
+
 	@GetMapping("/getAll")
-	public DataResult<List<Candidate>> getAll(){
-		return this.candidateService.getAll();
+	public DataResult<List<Employer>> getAll(){
+		
+		return this.employerService.getAll();
 	}
 	
 	@PostMapping("/add")
-	public ResponseEntity<?> add(@Valid @RequestBody Candidate candidate) {
-		return ResponseEntity.ok(this.candidateService.add(candidate));
+	public ResponseEntity<?> add(@Valid @RequestBody Employer employer) {
+		return ResponseEntity.ok(this.employerService.add(employer));
 	}
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
@@ -59,5 +60,4 @@ public class CandidatesController {
 		= new ErrorDataResult<Object>(validationErrors,"Doğrulama hataları");
 		return errors;
 	}
-	
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kodlamaio.hrms.business.abstracts.CandidateService;
+import kodlamaio.hrms.core.emailValidation.CheckIfValidationEmail;
 import kodlamaio.hrms.core.utilities.results.DataResult;
 import kodlamaio.hrms.core.utilities.results.ErrorDataResult;
 import kodlamaio.hrms.core.utilities.results.ErrorResult;
@@ -20,8 +21,15 @@ import kodlamaio.hrms.entities.concretes.Candidate;
 public class CandidateManager implements CandidateService{
 
 	private CandidateDao candidateDao;
+	private CheckIfValidationEmail checkIfValidationEmail;
 	
-	
+	public CandidateManager(CheckIfValidationEmail checkIfValidationEmail) {
+		super();
+		this.checkIfValidationEmail = checkIfValidationEmail;
+	}
+
+
+
 	@Autowired
 	public CandidateManager(CandidateDao candidateDao) {
 		super();
@@ -44,7 +52,7 @@ public class CandidateManager implements CandidateService{
 			return new SuccessResult("Kişi eklendi");
 		} else {
 			
-			return new ErrorResult("Aynı e postayla başka bir kayıt var veya tcno yanlış");
+			return new ErrorResult("Aynı e postayla başka bir kayıt var");
 		}
 		
 		
@@ -75,7 +83,7 @@ public class CandidateManager implements CandidateService{
 		}
 	}
 
-
+	
 
 
 }
