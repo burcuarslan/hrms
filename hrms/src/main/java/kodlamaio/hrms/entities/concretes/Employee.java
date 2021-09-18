@@ -1,7 +1,5 @@
 package kodlamaio.hrms.entities.concretes;
 
-import java.time.LocalDate;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -21,10 +19,11 @@ import lombok.NoArgsConstructor;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="candidates")
+@Table(name="employees")
 @PrimaryKeyJoinColumn(name = "id",referencedColumnName = "id")
-public class Candidate extends User{
-
+public class Employee extends User {
+	
+	
 	@Column(name="id")
 	@JsonIgnore
 	private int id;
@@ -38,18 +37,5 @@ public class Candidate extends User{
 	@NotBlank
 	@NotNull
 	private String lastName;
-	
-	@NotBlank
-	@NotNull
-	private String passwordRepeat;
-	
-	@Column(name="identity_number")
-	@NotBlank
-	@NotNull
-	private String identityNumber;
-	
-	@Column(name="year_of_birth")
-	@NotNull
-	private LocalDate yearOfBirth;
-	
+
 }

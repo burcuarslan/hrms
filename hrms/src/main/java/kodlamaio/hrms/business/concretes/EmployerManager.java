@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kodlamaio.hrms.business.abstracts.EmployerService;
+import kodlamaio.hrms.core.emailValidation.CheckIfValidationEmail;
 import kodlamaio.hrms.core.utilities.results.DataResult;
+import kodlamaio.hrms.core.utilities.results.ErrorResult;
 import kodlamaio.hrms.core.utilities.results.Result;
 import kodlamaio.hrms.core.utilities.results.SuccessDataResult;
 import kodlamaio.hrms.core.utilities.results.SuccessResult;
@@ -17,11 +19,13 @@ import kodlamaio.hrms.entities.concretes.Employer;
 public class EmployerManager implements EmployerService{
 
 	private EmployerDao employerDao;
+	private CheckIfValidationEmail checkIfValidationEmail;
 	
 	@Autowired
-	public EmployerManager(EmployerDao employerDao) {
+	public EmployerManager(EmployerDao employerDao, CheckIfValidationEmail checkIfValidationEmail) {
 		super();
 		this.employerDao = employerDao;
+		this.checkIfValidationEmail=checkIfValidationEmail;
 	}
 
 	@Override
@@ -32,9 +36,42 @@ public class EmployerManager implements EmployerService{
 
 	@Override
 	public Result add(Employer employer) {
+		if (!checkIfEqualEmailAndDomain(employer.getEmail(), employer.getWebAddress())) {
+			return new ErrorResult("web sitesinin domaini ile email adresi uyuşmuyor");
+		} else if (!employer.getPassword().equals(employer.getPasswordRepeat())) {
+			return new ErrorResult("girilen şifreler aynı değil");
+		}
+		else if(!this.checkIfValidationEmail.checkValidation(employer.getEmail())){
+			return new ErrorResult("e mail onaylanmamış");
+		}
+		else if (!checkIfEmailExist(employer.getEmail())) {
+			return new ErrorResult("Aynı e postayla başka bir kayıt var");
+		}
+		else {
+			this.employerDao.save(employer);
+			return new SuccessResult("İşlem başarılı sistem personelinin onayını bekliyor");
+		}
 		
-		this.employerDao.save(employer);
-		return new SuccessResult("İşlem başarılı onay bekliyor");
+	}
+	
+    private Boolean checkIfEqualEmailAndDomain(String email, String website) {
+        String emailArr = email.split("@")[1];
+        String domain = website.substring(4, website.length());
+
+        if (emailArr.equals(domain)) {
+
+            return true;
+        }
+
+        return false;
+    }
+    
+    public Boolean checkIfEmailExist(String email) {
+		if (this.employerDao.getByEmail(email)!=null) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 }
