@@ -2,6 +2,9 @@ package kodlamaio.hrms.entities.concretes;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
@@ -20,11 +23,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="employers")
-@PrimaryKeyJoinColumn(name = "id",referencedColumnName = "id")
 public class Employer extends User {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
-	@JsonIgnore
 	private int id;
 	
 	
@@ -43,7 +46,6 @@ public class Employer extends User {
 	@NotNull
 	private String phoneNumber;
 	
-	@NotBlank
-	@NotNull
-	private String passwordRepeat;
+	@Column(name="is_confirm", columnDefinition = "boolean default false")
+	private Boolean isConfirm;
 }

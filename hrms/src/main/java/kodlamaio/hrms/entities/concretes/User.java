@@ -40,4 +40,10 @@ public class User {
 	@NotBlank
 	@NotNull
 	private String password;
+	
+
+	
+	
+	@Column(name="is_active", columnDefinition = "boolean default false")
+	private Boolean isActive;
 }

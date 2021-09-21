@@ -4,6 +4,9 @@ import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
@@ -22,11 +25,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="candidates")
-@PrimaryKeyJoinColumn(name = "id",referencedColumnName = "id")
+
 public class Candidate extends User{
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
-	@JsonIgnore
 	private int id;
 	
 	@Column(name="first_name")
@@ -38,10 +42,6 @@ public class Candidate extends User{
 	@NotBlank
 	@NotNull
 	private String lastName;
-	
-	@NotBlank
-	@NotNull
-	private String passwordRepeat;
 	
 	@Column(name="identity_number")
 	@NotBlank

@@ -8,4 +8,7 @@ public interface EmployerDao extends JpaRepository<Employer, Integer>{
 
 	Employer getByEmail(String email);
 	
+	/*
+	 * @Query("From Employer where id=:id") Employer getById(int id);
+	 */
 }

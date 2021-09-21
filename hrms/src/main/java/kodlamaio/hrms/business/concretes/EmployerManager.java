@@ -35,10 +35,10 @@ public class EmployerManager implements EmployerService{
 	}
 
 	@Override
-	public Result add(Employer employer) {
+	public Result add(Employer employer,String passwordRepeat) {
 		if (!checkIfEqualEmailAndDomain(employer.getEmail(), employer.getWebAddress())) {
 			return new ErrorResult("web sitesinin domaini ile email adresi uyuşmuyor");
-		} else if (!employer.getPassword().equals(employer.getPasswordRepeat())) {
+		} else if (!employer.getPassword().equals(passwordRepeat)) {
 			return new ErrorResult("girilen şifreler aynı değil");
 		}
 		else if(!this.checkIfValidationEmail.checkValidation(employer.getEmail())){
@@ -53,6 +53,27 @@ public class EmployerManager implements EmployerService{
 		}
 		
 	}
+	
+	@Override
+	public Result update(Employer employer,String passwordRepeat) {
+		
+		employer.setIsConfirm(false);
+		this.employerDao.save(employer);
+		return new SuccessResult("Güncelleme başarılı sistem personelinin onayını bekliyor");
+	
+	}
+	
+	@Override
+	public Result confirmEmployer(int id) {
+		
+		Employer employer=employerDao.getById(id);
+		employer.setIsConfirm(true);
+		employer.setIsActive(true);
+		this.employerDao.save(employer);
+		return new SuccessResult("Onaylama başarılı");
+	}
+
+
 	
     private Boolean checkIfEqualEmailAndDomain(String email, String website) {
         String emailArr = email.split("@")[1];
@@ -74,4 +95,6 @@ public class EmployerManager implements EmployerService{
 		}
 	}
 
+
+	
 }

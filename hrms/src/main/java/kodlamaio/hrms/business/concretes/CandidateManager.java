@@ -41,7 +41,7 @@ public class CandidateManager implements CandidateService{
 	}
 
 	@Override
-	public Result add(Candidate candidate) {
+	public Result add(Candidate candidate,String passwordRepeat) {
 		
 		if (!checkIfEmailExist(candidate.getEmail())) {
 			return new ErrorResult("Aynı e postayla başka bir kayıt var");
@@ -51,7 +51,7 @@ public class CandidateManager implements CandidateService{
 		else if(!checkIfIdentityNumberExist(candidate.getIdentityNumber())){
 			return new ErrorResult("bu tc no ile kayıt zaten var");
 		}
-		else if(!candidate.getPassword().equals(candidate.getPasswordRepeat())){
+		else if(!candidate.getPassword().equals(passwordRepeat)){
 			return new ErrorResult("girilen şifreler aynı değil");
 		}
 		else if(!this.checkIfValidationEmail.checkValidation(candidate.getEmail())){
